@@ -41,9 +41,13 @@ const transcriptEl = document.getElementById('transcript');
 const countEl = document.getElementById('count');
 const mantraInput = document.getElementById('mantraInput');
 
-let count = 0;
+let count = parseInt(localStorage.getItem('mantraCount')) || 0;
 let finalTranscript = '';
 let recog;
+
+// Load stored mantra
+mantraInput.value = localStorage.getItem('mantraName') || 'Ram';
+countEl.textContent = count;
 
 if (!SpeechRecognition) {
   transcriptEl.textContent = 'Your browser does not support Web Speech API. Use Chrome on Android/PC.';
@@ -81,13 +85,20 @@ if (!SpeechRecognition) {
       const text = result[0].transcript.trim();
 
       if (result.isFinal) {
+        // const normalized = text.toLowerCase().replace(/[^a-z\s]/g, ' ');
+        // const regex = new RegExp(`\\b${mantra}(\\s*(nam|naam))?\\b`, 'gi');
+        // const matches = normalized.match(regex);
         const normalized = text.toLowerCase().replace(/[^a-z\s]/g, ' ');
-        const regex = new RegExp(`\\b${mantra}(\\s*(nam|naam))?\\b`, 'gi');
-        const matches = normalized.match(regex);
+        const mantra = mantraInput.value.trim().toLowerCase();
+        // Count overlapping occurrences
+        const matches = [...normalized.matchAll(new RegExp(`(?=${mantra})`, 'gi'))];
+
+
 
         if (matches) {
           count += matches.length;
           countEl.textContent = count;
+          localStorage.setItem('mantraCount', count); // store count
         }
         finalTranscript += text + ' ';
       } else {
@@ -101,10 +112,10 @@ if (!SpeechRecognition) {
 
   startBtn.onclick = async () => {
     try {
+      // Save current mantra
+      localStorage.setItem('mantraName', mantraInput.value.trim());
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      count = 0;
       finalTranscript = '';
-      countEl.textContent = count;
       transcriptEl.textContent = 'Preparing microphone...';
       recog.start();
     } catch (err) {
@@ -120,6 +131,7 @@ if (!SpeechRecognition) {
     finalTranscript = '';
     countEl.textContent = '0';
     transcriptEl.textContent = `Press Start and chant "${mantraInput.value}".`;
+    localStorage.setItem('mantraCount', count); // reset stored count
   };
 }
 </script>
