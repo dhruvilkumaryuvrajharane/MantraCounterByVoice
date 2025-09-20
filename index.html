@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Ram Nam Counter — Fixed</title>
+<style>
+  body { font-family: sans-serif; text-align: center; padding: 30px; background: #f7f8fb; }
+  h1 { margin-bottom: 8px; }
+  #count { font-size: 56px; color: #0b69ff; font-weight: 700; margin: 16px; }
+  #transcript { white-space: pre-wrap; margin: 8px; font-size: 16px; color: #333; }
+  button { margin: 6px; padding: 10px 16px; border-radius: 8px; border: 0; cursor: pointer; font-weight: 700; }
+  .start { background: #0b69ff; color: #fff; } 
+  .stop { background: #ef4444; color: #fff; } 
+  .reset { background: #6b7280; color: #fff; }
+</style>
+</head>
+<body>
+  <h1>Ram Nam Counter (Fixed)</h1>
+  <div id="count">0</div>
+  <div id="transcript">Press Start and chant "Ram" or "Ram Nam".</div>
+  <div>
+    <button id="startBtn" class="start">Start</button>
+    <button id="stopBtn" class="stop" disabled>Stop</button>
+    <button id="resetBtn" class="reset">Reset</button>
+  </div>
+
+<script>
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const startBtn = document.getElementById('startBtn');
+const stopBtn  = document.getElementById('stopBtn');
+const resetBtn = document.getElementById('resetBtn');
+const transcriptEl = document.getElementById('transcript');
+const countEl = document.getElementById('count');
+
+let count = 0;
+let finalTranscript = '';
+let recog;
+
+if (!SpeechRecognition) {
+  transcriptEl.textContent = 'Your browser does not support Web Speech API. Use Chrome on Android/PC.';
+  startBtn.disabled = true;
+} else {
+  recog = new SpeechRecognition();
+  recog.lang = 'en-IN';
+  recog.interimResults = true;
+  recog.continuous = true;
+
+  recog.onstart = () => {
+    transcriptEl.textContent = 'Listening... Start chanting "Ram".';
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+  };
+
+  recog.onend = () => {
+    transcriptEl.textContent = finalTranscript || 'Stopped listening.';
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+  };
+
+  recog.onerror = (e) => {
+    console.warn('Speech error', e);
+    transcriptEl.textContent = 'Error: ' + (e.error || 'unknown');
+  };
+
+  recog.onresult = (event) => {
+    let interim = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const result = event.results[i];
+      const text = result[0].transcript.trim();
+
+      if (result.isFinal) {
+        const normalized = text.toLowerCase().replace(/[^a-z\s]/g, ' ');
+        // Matches Ram, Raam, Ram Nam, Raam Naam
+        const matches = normalized.match(/\b(ram|raam)(\s*(nam|naam))?\b/gi);
+
+        if (matches) {
+          count += matches.length;
+          countEl.textContent = count;
+        }
+        finalTranscript += text + ' ';
+      } else {
+        interim += text + ' ';
+      }
+    }
+
+    transcriptEl.textContent = (finalTranscript ? finalTranscript + '\n\n' : '') + 
+                               (interim ? '(hearing:) ' + interim : '');
+  };
+
+  startBtn.onclick = async () => {
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      count = 0;
+      finalTranscript = '';
+      countEl.textContent = count;
+      transcriptEl.textContent = 'Preparing microphone...';
+      recog.start();
+    } catch (err) {
+      transcriptEl.textContent = 'Microphone permission required.';
+      console.error(err);
+    }
+  };
+
+  stopBtn.onclick = () => recog.stop();
+
+  resetBtn.onclick = () => {
+    count = 0;
+    finalTranscript = '';
+    countEl.textContent = '0';
+    transcriptEl.textContent = 'Press Start and chant "Ram" or "Ram Nam".';
+  };
+}
+</script>
+</body>
+</html>
