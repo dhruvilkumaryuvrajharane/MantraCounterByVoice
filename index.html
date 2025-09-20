@@ -187,9 +187,9 @@ if (!SpeechRecognition) {
     stopBtn.disabled = true;
 
      // Auto-restart unless user manually stopped
-    if (!userStopped) {
-        recog.start();
-    }
+    // if (!userStopped) {
+    //     recog.start();
+    // }
   };
 
   recog.onerror = (e) => {
