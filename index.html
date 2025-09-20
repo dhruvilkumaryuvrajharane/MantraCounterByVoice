@@ -170,6 +170,7 @@ const mantraInput = document.getElementById('mantraInput');
 let count = parseInt(localStorage.getItem('mantraCount')) || 0;
 let finalTranscript = '';
 let recog;
+let userStopped = false;
 
 // Load stored mantra
 mantraInput.value = localStorage.getItem('mantraName') || 'Ram';
@@ -194,6 +195,11 @@ if (!SpeechRecognition) {
     transcriptEl.textContent = finalTranscript || 'Stopped listening.';
     startBtn.disabled = false;
     stopBtn.disabled = true;
+
+     // Auto-restart unless user manually stopped
+    if (!userStopped) {
+        recog.start();
+    }
   };
 
   recog.onerror = (e) => {
@@ -240,6 +246,7 @@ if (!SpeechRecognition) {
   startBtn.onclick = async () => {
     try {
       // Save current mantra
+      userStopped = false;
       localStorage.setItem('mantraName', mantraInput.value.trim());
       await navigator.mediaDevices.getUserMedia({ audio: true });
       finalTranscript = '';
@@ -251,7 +258,10 @@ if (!SpeechRecognition) {
     }
   };
 
-  stopBtn.onclick = () => recog.stop();
+  stopBtn.onclick = () => {
+    userStopped = true;
+    recog.stop()
+  };
 
   resetBtn.onclick = () => {
     count = 0;
