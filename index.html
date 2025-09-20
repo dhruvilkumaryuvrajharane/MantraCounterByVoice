@@ -2,14 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="description" content="Voice-based Mantra Counter. Count your Ram, Radha, or any mantra hands-free online.">
-<meta name="keywords" content="mantra counter, japa, chanting, meditation, voice counting">
+<meta name="description" content="Voice-based Mantra Counter. Count your Ram, Radha, or any mantra hands-free online. Developed by Dhruvil Kumar.">
+<meta name="keywords" content="mantra counter, voice mantra counter, japa, chanting, meditation, Ram Nam, Radha Nam">
 <meta name="author" content="Dhruvil Kumar">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mantra Counter From Voice</title>
+<title>Voice-Based Mantra Counter Online by Dhruvil Kumar</title>
+
+<!-- Open Graph for social sharing -->
+<meta property="og:title" content="Voice-Based Mantra Counter by Dhruvil Kumar">
+<meta property="og:description" content="Count your Ram, Radha, or any mantra hands-free using voice. Perfect for meditation and japa.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dhruvilkumaryuvrajharane.github.io/MantraCounterByVoice/">
+<meta property="og:image" content="https://dhruvilkumaryuvrajharane.github.io/MantraCounterByVoice/screenshot.png">
+
 <style>
   body { font-family: sans-serif; text-align: center; padding: 30px; background: #f7f8fb; }
   h1 { margin-bottom: 8px; }
+  h2 { margin: 12px 0; }
+  p { font-size: 16px; color: #333; margin-bottom: 12px; }
   #count { font-size: 56px; color: #0b69ff; font-weight: 700; margin: 16px; }
   #transcript { white-space: pre-wrap; margin: 8px; font-size: 16px; color: #333; }
   input { padding: 8px; font-size: 16px; margin: 10px 0; width: 150px; text-align: center; }
@@ -20,21 +30,24 @@
 </style>
 </head>
 <body>
-  <h1>Voice-based mantra counter app by tgtdk</h1>
 
-  <div>
-    <label>Enter Mantra: </label>
-    <input type="text" id="mantraInput" value="Ram" />
-  </div>
+<h1>Voice-Based Mantra Counter App</h1>
+<p>Count your Ram, Radha, or any mantra hands-free using your voice. Developed by Dhruvil Kumar.</p>
 
-  <div id="count">0</div>
-  <div id="transcript">Press Start and chant your mantra.</div>
+<h2>Enter Your Mantra:</h2>
+<div>
+  <label for="mantraInput">Mantra:</label>
+  <input type="text" id="mantraInput" value="Ram" />
+</div>
 
-  <div>
-    <button id="startBtn" class="start">Start</button>
-    <button id="stopBtn" class="stop" disabled>Stop</button>
-    <button id="resetBtn" class="reset">Reset</button>
-  </div>
+<div id="count">0</div>
+<div id="transcript">Press Start and chant your mantra.</div>
+
+<div>
+  <button id="startBtn" class="start">Start</button>
+  <button id="stopBtn" class="stop" disabled>Stop</button>
+  <button id="resetBtn" class="reset">Reset</button>
+</div>
 
 <script>
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
