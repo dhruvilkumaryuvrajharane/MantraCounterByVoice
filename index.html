@@ -14,7 +14,9 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://dhruvilkumaryuvrajharane.github.io/MantraCounterByVoice/">
 <meta property="og:image" content="https://dhruvilkumaryuvrajharane.github.io/MantraCounterByVoice/screenshot.png">
-
+<script 
+  src="https://www.paypal.com/sdk/js?client-id=BAAlaI7aq_biy2fJ2eZfBeTDhWnCmcByuMQQGwdmOZHIT2rxzPUgcqtB1Zc21txQcOhXWNdzEKuZIxB5rc&components=hosted-buttons&disable-funding=venmo&currency=USD">
+</script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -142,6 +144,27 @@
     <button id="stopBtn" class="stop" disabled>Stop</button>
     <button id="resetBtn" class="reset">Reset</button>
   </div>
+
+  <div style="margin-top: 20px;">
+  <h2>Support This App</h2>
+  <p>If you like this app, you can support me to keep it free and ad-free.</p>
+  
+  <!-- PayPal donation button -->
+  <form action="https://www.paypal.com/donate" method="post" target="_blank">
+    <input type="hidden" name="business" value="YOUR_PAYPAL_EMAIL_OR_ID" />
+    <input type="hidden" name="currency_code" value="USD" />
+    <button type="submit" style="background:#ffc439; color:#111; border:none; border-radius:12px; padding:10px 20px; font-weight:700; cursor:pointer;">
+      Donate via PayPal
+    </button>
+  </form>
+</div>
+
+<div id="paypal-container-U9HVWXPGHADEW"></div>
+<script>
+  paypal.HostedButtons({
+    hostedButtonId: "U9HVWXPGHADEW",
+  }).render("#paypal-container-U9HVWXPGHADEW")
+</script>
 
   <div class="footer">
     Made by <a href="https://github.com/dhruvilkumaryuvrajharane/MantraCounterByVoice" target="_blank">Dhruvil Kumar</a>
