@@ -16,37 +16,146 @@
 <meta property="og:image" content="https://dhruvilkumaryuvrajharane.github.io/MantraCounterByVoice/screenshot.png">
 
 <style>
-  body { font-family: sans-serif; text-align: center; padding: 30px; background: #f7f8fb; }
-  h1 { margin-bottom: 8px; }
-  h2 { margin: 12px 0; }
-  p { font-size: 16px; color: #333; margin-bottom: 12px; }
-  #count { font-size: 56px; color: #0b69ff; font-weight: 700; margin: 16px; }
-  #transcript { white-space: pre-wrap; margin: 8px; font-size: 16px; color: #333; }
-  input { padding: 8px; font-size: 16px; margin: 10px 0; width: 150px; text-align: center; }
-  button { margin: 6px; padding: 10px 16px; border-radius: 8px; border: 0; cursor: pointer; font-weight: 700; }
-  .start { background: #0b69ff; color: #fff; } 
-  .stop { background: #ef4444; color: #fff; } 
-  .reset { background: #6b7280; color: #fff; }
+  /* Reset and body */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom, #e0f7fa, #f7f8fb);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* Container card */
+  .container {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
+  .container:hover {
+    transform: translateY(-5px);
+  }
+
+  h1 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #0b69ff;
+  }
+  h2 {
+    font-size: 20px;
+    margin: 15px 0 5px;
+    color: #333;
+  }
+  p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+  }
+
+  /* Input */
+  input {
+    padding: 10px 15px;
+    font-size: 16px;
+    margin: 10px 0 20px;
+    width: 70%;
+    border: 2px solid #0b69ff;
+    border-radius: 10px;
+    outline: none;
+    transition: 0.3s;
+  }
+  input:focus {
+    border-color: #ff4081;
+    box-shadow: 0 0 5px #ff4081;
+  }
+
+  /* Counter display */
+  #count {
+    font-size: 60px;
+    font-weight: 700;
+    color: #ff4081;
+    margin: 20px 0;
+  }
+  #transcript {
+    font-size: 16px;
+    color: #555;
+    white-space: pre-wrap;
+    background: #f0f4f8;
+    padding: 15px;
+    border-radius: 12px;
+    min-height: 80px;
+    max-height: 150px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
+
+  /* Buttons */
+  .buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  button {
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    min-width: 100px;
+  }
+  button.start { background: #0b69ff; color: #fff; }
+  button.start:hover { background: #0056d1; }
+  button.stop { background: #ef4444; color: #fff; }
+  button.stop:hover { background: #c10000; }
+  button.reset { background: #6b7280; color: #fff; }
+  button.reset:hover { background: #4b4f55; }
+
+  /* Footer / attribution */
+  .footer {
+    margin-top: 25px;
+    font-size: 14px;
+    color: #777;
+  }
+  .footer a {
+    color: #0b69ff;
+    text-decoration: none;
+  }
+  .footer a:hover {
+    text-decoration: underline;
+  }
 </style>
 </head>
 <body>
 
-<h1>Voice-Based Mantra Counter App</h1>
-<p>Count your Ram, Radha, or any mantra hands-free using your voice. Developed by Dhruvil Kumar.</p>
+<div class="container">
+  <h1>Voice-Based Mantra Counter</h1>
+  <p>Count your Ram, Radha, or any mantra hands-free. Developed by Dhruvil Kumar.</p>
 
-<h2>Enter Your Mantra:</h2>
-<div>
-  <label for="mantraInput">Mantra:</label>
+  <h2>Enter Your Mantra:</h2>
   <input type="text" id="mantraInput" value="Ram" />
-</div>
 
-<div id="count">0</div>
-<div id="transcript">Press Start and chant your mantra.</div>
+  <div id="count">0</div>
+  <div id="transcript">Press Start and chant your mantra.</div>
 
-<div>
-  <button id="startBtn" class="start">Start</button>
-  <button id="stopBtn" class="stop" disabled>Stop</button>
-  <button id="resetBtn" class="reset">Reset</button>
+  <div class="buttons">
+    <button id="startBtn" class="start">Start</button>
+    <button id="stopBtn" class="stop" disabled>Stop</button>
+    <button id="resetBtn" class="reset">Reset</button>
+  </div>
+
+  <div class="footer">
+    Made by <a href="https://github.com/dhruvilkumaryuvrajharane/MantraCounterByVoice" target="_blank">Dhruvil Kumar</a>
+  </div>
 </div>
 
 <script>
@@ -125,6 +234,7 @@ if (!SpeechRecognition) {
 
     transcriptEl.textContent = (finalTranscript ? finalTranscript + '\n\n' : '') + 
                                (interim ? '(hearing:) ' + interim : '');
+    transcriptEl.scrollTop = transcriptEl.scrollHeight;
   };
 
   startBtn.onclick = async () => {
