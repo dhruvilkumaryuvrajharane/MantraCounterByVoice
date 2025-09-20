@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Voice-Based Mantra Counter Online by Dhruvil Kumar</title>
 
-<!-- Open Graph for social sharing -->
+<!-- Open Graph -->
 <meta property="og:title" content="Voice-Based Mantra Counter by Dhruvil Kumar">
 <meta property="og:description" content="Count your Ram, Radha, or any mantra hands-free using voice. Perfect for meditation and japa.">
 <meta property="og:type" content="website">
@@ -16,11 +16,10 @@
 <meta property="og:image" content="https://dhruvilkumaryuvrajharane.github.io/MantraCounterByVoice/screenshot.png">
 
 <style>
-  /* Reset and body */
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(to bottom, #e0f7fa, #f7f8fb);
+    background: linear-gradient(135deg, #f0f9ff, #f7f8fb);
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -28,99 +27,87 @@
     padding: 20px;
   }
 
-  /* Container card */
   .container {
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    padding: 30px;
+    background: #fff;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 35px 25px;
     width: 100%;
-    max-width: 500px;
+    max-width: 520px;
     text-align: center;
-    transition: transform 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   .container:hover {
     transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
   }
 
-  h1 {
-    font-size: 28px;
-    margin-bottom: 15px;
-    color: #0b69ff;
-  }
-  h2 {
-    font-size: 20px;
-    margin: 15px 0 5px;
-    color: #333;
-  }
-  p {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 15px;
-  }
+  h1 { font-size: 32px; margin-bottom: 15px; color: #0b69ff; }
+  p { font-size: 16px; color: #555; margin-bottom: 20px; }
+  h2 { font-size: 20px; margin-bottom: 10px; color: #333; }
 
-  /* Input */
   input {
-    padding: 10px 15px;
+    padding: 12px 18px;
     font-size: 16px;
     margin: 10px 0 20px;
-    width: 70%;
+    width: 75%;
     border: 2px solid #0b69ff;
-    border-radius: 10px;
+    border-radius: 12px;
     outline: none;
     transition: 0.3s;
   }
   input:focus {
     border-color: #ff4081;
-    box-shadow: 0 0 5px #ff4081;
+    box-shadow: 0 0 8px #ff4081;
   }
 
-  /* Counter display */
   #count {
-    font-size: 60px;
-    font-weight: 700;
+    font-size: 72px;
+    font-weight: 800;
     color: #ff4081;
-    margin: 20px 0;
+    margin: 25px 0;
+    transition: transform 0.1s ease;
   }
+
   #transcript {
     font-size: 16px;
     color: #555;
     white-space: pre-wrap;
     background: #f0f4f8;
     padding: 15px;
-    border-radius: 12px;
-    min-height: 80px;
-    max-height: 150px;
+    border-radius: 14px;
+    min-height: 100px;
+    max-height: 200px;
     overflow-y: auto;
     scroll-behavior: smooth;
+    margin-bottom: 20px;
   }
 
-  /* Buttons */
   .buttons {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 15px;
+    margin-top: 10px;
   }
   button {
-    padding: 12px 20px;
+    padding: 14px 22px;
     font-size: 16px;
     font-weight: 700;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     cursor: pointer;
     transition: 0.3s;
-    min-width: 100px;
+    min-width: 110px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
   button.start { background: #0b69ff; color: #fff; }
-  button.start:hover { background: #0056d1; }
+  button.start:hover { background: #0056d1; transform: translateY(-2px); }
   button.stop { background: #ef4444; color: #fff; }
-  button.stop:hover { background: #c10000; }
+  button.stop:hover { background: #c10000; transform: translateY(-2px); }
   button.reset { background: #6b7280; color: #fff; }
-  button.reset:hover { background: #4b4f55; }
+  button.reset:hover { background: #4b4f55; transform: translateY(-2px); }
 
-  /* Footer / attribution */
   .footer {
     margin-top: 25px;
     font-size: 14px;
@@ -130,8 +117,11 @@
     color: #0b69ff;
     text-decoration: none;
   }
-  .footer a:hover {
-    text-decoration: underline;
+  .footer a:hover { text-decoration: underline; }
+
+  @media(max-width: 550px){
+    input { width: 90%; }
+    #count { font-size: 60px; }
   }
 </style>
 </head>
@@ -230,24 +220,23 @@ if (!SpeechRecognition) {
         if (matches) {
           count += matches.length;
           countEl.textContent = count;
-          localStorage.setItem('mantraCount', count); // store count
+          countEl.style.transform = 'scale(1.2)';
+          setTimeout(()=> countEl.style.transform = 'scale(1)', 100);
+          localStorage.setItem('mantraCount', count);
         }
         finalTranscript += text + ' ';
       } else {
         interim += text + ' ';
       }
     }
-
-    transcriptEl.textContent = (finalTranscript ? finalTranscript + '\n\n' : '') + 
-                               (interim ? '(hearing:) ' + interim : '');
+    transcriptEl.textContent = (finalTranscript ? finalTranscript + '\n\n' : '') + (interim ? '(hearing:) ' + interim : '');
     transcriptEl.scrollTop = transcriptEl.scrollHeight;
   };
 
   startBtn.onclick = async () => {
+    userStopped = false;
+    localStorage.setItem('mantraName', mantraInput.value.trim());
     try {
-      // Save current mantra
-      userStopped = false;
-      localStorage.setItem('mantraName', mantraInput.value.trim());
       await navigator.mediaDevices.getUserMedia({ audio: true });
       finalTranscript = '';
       transcriptEl.textContent = 'Preparing microphone...';
