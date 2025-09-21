@@ -202,7 +202,7 @@ if (!SpeechRecognition) {
     console.warn('Speech error', e);
     setTimeout(()=>{
       transcriptEl.textContent = 'Error: ' + (e.error || 'unknown');
-    });
+    },1000);
   };
 
   recog.onresult = (event) => {
