@@ -196,7 +196,7 @@ if (!SpeechRecognition) {
 
   recog.onerror = (e) => {
     // alert("onerror Called");
-    alert("Error Please Contact Devloper: " + JSON.stringify(e));
+    alert("Speech error Please Contact Devloper: " + JSON.stringify(e));
     console.warn('Speech error', e);
     transcriptEl.textContent = 'Error: ' + (e.error || 'unknown');
   };
