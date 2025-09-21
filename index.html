@@ -187,6 +187,9 @@ if (!SpeechRecognition) {
 
   recog.onend = () => {
     console.log("recog.onend Called");
+    console.log("userStopped:",userStopped);
+    console.log("isErrorCome:",isErrorCome);
+    debugger
     transcriptEl.textContent = finalTranscript || 'Stopped listening.';
     startBtn.disabled = false;
     stopBtn.disabled = true;
