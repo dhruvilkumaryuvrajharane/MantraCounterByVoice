@@ -192,9 +192,9 @@ if (!SpeechRecognition) {
     stopBtn.disabled = true;
 
      // Auto-restart unless user manually stopped
-    // if (!userStopped && !isErrorCome) {
-    //      recog.start();
-    //  }
+    if (!userStopped && !isErrorCome) {
+         recog.start();
+     }
   };
 
   recog.onerror = (e) => {
@@ -263,6 +263,7 @@ if (!SpeechRecognition) {
       transcriptEl.textContent = 'Preparing microphone...';
       recog.start();
     } catch (err) {
+      isErrorCome = true;
       transcriptEl.textContent = 'Microphone permission required.';
       alert("Microphone permission required: " + err.message);
       console.error(err);
