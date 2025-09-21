@@ -257,6 +257,7 @@ if (!SpeechRecognition) {
       recog.start();
     } catch (err) {
       transcriptEl.textContent = 'Microphone permission required.';
+      alert("Microphone permission required: " + err.message);
       console.error(err);
     }
   };
