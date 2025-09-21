@@ -199,8 +199,8 @@ if (!SpeechRecognition) {
 
   recog.onerror = (e) => {
     console.log("Speech error Please Contact Devloper or use Browser on : " + e.error);
+    isErrorCome = true;
     if (e.error === 'audio-capture') {
-      isErrorCome = true;
       setTimeout(()=>{
         transcriptEl.textContent = 'audio-capture  error : Microphone could not be captured. Make sure no other app is using it, and microphone access is allowed.';
       },1000);
