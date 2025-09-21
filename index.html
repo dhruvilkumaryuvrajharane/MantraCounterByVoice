@@ -198,6 +198,7 @@ if (!SpeechRecognition) {
     // alert("onerror Called");
     // alert("Speech error Please Contact Devloper: " + JSON.stringify(e));
     alert("Speech error Please Contact Devloper: " + Object.getOwnPropertyNames(e).map(k => k + "=" + e[k]).join(", "));
+    alert("Speech error Please Contact Devloper: " + e.error);
     console.warn('Speech error', e);
     setTimeout(()=>{
       transcriptEl.textContent = 'Error: ' + (e.error || 'unknown');
@@ -214,7 +215,7 @@ if (!SpeechRecognition) {
       const result = event.results[i];
       const text = result[0].transcript.trim();
       if (result.isFinal) {
-         alert("readed: " + text);
+        //  alert("readed: " + text);
         // const normalized = text.toLowerCase().replace(/[^a-z\s]/g, ' ');
         // const regex = new RegExp(`\\b${mantra}(\\s*(nam|naam))?\\b`, 'gi');
         // const matches = normalized.match(regex);
@@ -242,7 +243,7 @@ if (!SpeechRecognition) {
   };
 
   startBtn.onclick = async () => {
-    alert("startBtn.onclick")
+    // alert("startBtn.onclick")
     userStopped = false;
     localStorage.setItem('mantraName', mantraInput.value.trim());
       // Disable button immediately
