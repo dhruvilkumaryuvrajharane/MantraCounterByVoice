@@ -176,14 +176,14 @@ if (!SpeechRecognition) {
   recog.continuous = true;
 
   recog.onstart = () => {
-  console.log("onstart Called");
+  alert("onstart Called");
     transcriptEl.textContent = `Listening... Start chanting "${mantraInput.value}".`;
     startBtn.disabled = true;
     stopBtn.disabled = false;
   };
 
   recog.onend = () => {
-    console.log("recog.onend Called");
+    alert("recog.onend Called");
     transcriptEl.textContent = finalTranscript || 'Stopped listening.';
     startBtn.disabled = false;
     stopBtn.disabled = true;
@@ -195,13 +195,13 @@ if (!SpeechRecognition) {
   };
 
   recog.onerror = (e) => {
-    console.log("onstart Called");
+    alert("onstart Called");
     console.warn('Speech error', e);
     transcriptEl.textContent = 'Error: ' + (e.error || 'unknown');
   };
 
   recog.onresult = (event) => {
-    console.log("recog.onresult");
+    alert("recog.onresult");
     const mantra = mantraInput.value.trim().toLowerCase();
     if (!mantra) return;
 
@@ -209,8 +209,8 @@ if (!SpeechRecognition) {
     for (let i = event.resultIndex; i < event.results.length; i++) {
       const result = event.results[i];
       const text = result[0].transcript.trim();
- console.log("readed: ", text);
       if (result.isFinal) {
+         alert("readed: " + text);
         // const normalized = text.toLowerCase().replace(/[^a-z\s]/g, ' ');
         // const regex = new RegExp(`\\b${mantra}(\\s*(nam|naam))?\\b`, 'gi');
         // const matches = normalized.match(regex);
@@ -238,7 +238,7 @@ if (!SpeechRecognition) {
   };
 
   startBtn.onclick = async () => {
-    console.log("startBtn.onclick")
+    alert("startBtn.onclick")
     userStopped = false;
     localStorage.setItem('mantraName', mantraInput.value.trim());
       // Disable button immediately
