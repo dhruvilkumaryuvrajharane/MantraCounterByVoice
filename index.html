@@ -179,37 +179,42 @@ if (!SpeechRecognition) {
   recog.continuous = true;
 
   recog.onstart = () => {
-  // alert("onstart Called");
+  console.log("onstart Called");
     transcriptEl.textContent = `Listening... Start chanting "${mantraInput.value}".`;
     startBtn.disabled = true;
     stopBtn.disabled = false;
   };
 
   recog.onend = () => {
-    // alert("recog.onend Called");
+    console.log("recog.onend Called");
     transcriptEl.textContent = finalTranscript || 'Stopped listening.';
     startBtn.disabled = false;
     stopBtn.disabled = true;
 
      // Auto-restart unless user manually stopped
-    if (!userStopped && !isErrorCome) {
-         recog.start();
-     }
+    // if (!userStopped && !isErrorCome) {
+    //      recog.start();
+    //  }
   };
 
   recog.onerror = (e) => {
-    // alert("Speech error Please Contact Devloper or use Browser on : " + e.error);
+    console.log("Speech error Please Contact Devloper or use Browser on : " + e.error);
     if (e.error === 'audio-capture') {
       isErrorCome = true;
       setTimeout(()=>{
-        transcriptEl.textContent = 'Microphone could not be captured. Make sure no other app is using it, and microphone access is allowed.';
+        transcriptEl.textContent = 'audio-capture  error : Microphone could not be captured. Make sure no other app is using it, and microphone access is allowed.';
+      },1000);
+    }else{
+      setTimeout(()=>{
+        transcriptEl.textContent = e.error;
       },1000);
     }
 
   };
 
   recog.onresult = (event) => {
-    // alert("recog.onresult");
+    console.log("recog.onresult");
+    console.log(event);
     const mantra = mantraInput.value.trim().toLowerCase();
     if (!mantra) return;
 
@@ -246,33 +251,33 @@ if (!SpeechRecognition) {
   };
 
   startBtn.onclick = async () => {
-    // alert("startBtn.onclick")
+    console.log("startBtn.onclick")
     userStopped = false;
     localStorage.setItem('mantraName', mantraInput.value.trim());
       
     
 
-    // try {
-    //   await navigator.mediaDevices.getUserMedia({ audio: true });
-    //   finalTranscript = '';
-    //   transcriptEl.textContent = 'Preparing microphone...';
-    //   recog.start();
-    // } catch (err) {
-    //   transcriptEl.textContent = 'Microphone permission required.';
-    //   alert("Microphone permission required: " + err.message);
-    //   console.error(err);
-    // }
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      finalTranscript = '';
+      transcriptEl.textContent = 'Preparing microphone...';
+      recog.start();
+    } catch (err) {
+      transcriptEl.textContent = 'Microphone permission required.';
+      alert("Microphone permission required: " + err.message);
+      console.error(err);
+    }
 
-    finalTranscript = '';
-    transcriptEl.textContent = 'Preparing microphone...';
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(() => {
-        recog.start(); // must be directly after user tap
-      })
-      .catch(err => {
-        transcriptEl.textContent = 'Microphone access required.';
-        alert("Microphone permission required: " + err.message);
-      });
+    // finalTranscript = '';
+    // transcriptEl.textContent = 'Preparing microphone...';
+    // navigator.mediaDevices.getUserMedia({ audio: true })
+    //   .then(() => {
+    //     recog.start(); // must be directly after user tap
+    //   })
+    //   .catch(err => {
+    //     transcriptEl.textContent = 'Microphone access required.';
+    //     alert("Microphone permission required: " + err.message);
+    //   });
     // Disable button immediately
     startBtn.disabled = true;
     stopBtn.disabled = false;
@@ -286,6 +291,7 @@ if (!SpeechRecognition) {
   };
 
   resetBtn.onclick = () => {
+    recog.stop()
     userStopped = true;
     count = 0;
     finalTranscript = '';
