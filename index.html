@@ -207,12 +207,16 @@ if (!SpeechRecognition) {
       setTimeout(()=>{
         transcriptEl.textContent = 'audio-capture  error : Microphone could not be captured. Make sure no other app is using it, and microphone access is allowed.';
       },1000);
+    }else if(e.error == 'no-speech'){
+      setTimeout(()=>{
+        transcriptEl.textContent = e.error + ` Listening...  Start chanting "${mantraInput.value}"`;
+      },1000);
+      isErrorCome = false;
     }else{
       setTimeout(()=>{
         transcriptEl.textContent = e.error;
       },1000);
     }
-
   };
 
   recog.onresult = (event) => {
