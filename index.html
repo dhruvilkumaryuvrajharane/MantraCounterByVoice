@@ -150,13 +150,6 @@
 
 <script>
 
-const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-// if (isMobile) {
-//     recog.continuous = false;  // Mobile often fails continuous recognition
-// } else {
-//     recog.continuous = true;
-// }
-alert(navigator.userAgent)
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const startBtn = document.getElementById('startBtn');
@@ -204,14 +197,13 @@ if (!SpeechRecognition) {
   };
 
   recog.onerror = (e) => {
-    // alert("onerror Called");
-    // alert("Speech error Please Contact Devloper: " + JSON.stringify(e));
-    alert("Speech error Please Contact Devloper: " + Object.getOwnPropertyNames(e).map(k => k + "=" + e[k]).join(", "));
-    alert("Speech error Please Contact Devloper: " + e.error);
-    console.warn('Speech error', e);
-    setTimeout(()=>{
-      transcriptEl.textContent = 'Error: ' + (e.error || 'unknown');
-    },1000);
+    // alert("Speech error Please Contact Devloper or use Browser on : " + e.error);
+    if (e.error === 'audio-capture') {
+      setTimeout(()=>{
+        transcriptEl.textContent = 'Microphone could not be captured. Make sure no other app is using it, and microphone access is allowed.';
+      },1000);
+    }
+
   };
 
   recog.onresult = (event) => {
@@ -255,20 +247,35 @@ if (!SpeechRecognition) {
     // alert("startBtn.onclick")
     userStopped = false;
     localStorage.setItem('mantraName', mantraInput.value.trim());
-      // Disable button immediately
+      
+    
+
+    // try {
+    //   await navigator.mediaDevices.getUserMedia({ audio: true });
+    //   finalTranscript = '';
+    //   transcriptEl.textContent = 'Preparing microphone...';
+    //   recog.start();
+    // } catch (err) {
+    //   transcriptEl.textContent = 'Microphone permission required.';
+    //   alert("Microphone permission required: " + err.message);
+    //   console.error(err);
+    // }
+
+    finalTranscript = '';
+    transcriptEl.textContent = 'Preparing microphone...';
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(() => {
+        recog.start(); // must be directly after user tap
+      })
+      .catch(err => {
+        transcriptEl.textContent = 'Microphone access required.';
+        alert("Microphone permission required: " + err.message);
+      });
+    // Disable button immediately
     startBtn.disabled = true;
     stopBtn.disabled = false;
 
-    try {
-      await navigator.mediaDevices.getUserMedia({ audio: true });
-      finalTranscript = '';
-      transcriptEl.textContent = 'Preparing microphone...';
-      recog.start();
-    } catch (err) {
-      transcriptEl.textContent = 'Microphone permission required.';
-      alert("Microphone permission required: " + err.message);
-      console.error(err);
-    }
+
   };
 
   stopBtn.onclick = () => {
