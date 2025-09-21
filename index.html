@@ -158,6 +158,7 @@ const resetBtn = document.getElementById('resetBtn');
 const transcriptEl = document.getElementById('transcript');
 const countEl = document.getElementById('count');
 const mantraInput = document.getElementById('mantraInput');
+let isErrorCome = false;
 
 let count = parseInt(localStorage.getItem('mantraCount')) || 0;
 let finalTranscript = '';
@@ -191,14 +192,15 @@ if (!SpeechRecognition) {
     stopBtn.disabled = true;
 
      // Auto-restart unless user manually stopped
-    // if (!userStopped) {
-    //      recog.start();
-    //  }
+    if (!userStopped && !isErrorCome) {
+         recog.start();
+     }
   };
 
   recog.onerror = (e) => {
     // alert("Speech error Please Contact Devloper or use Browser on : " + e.error);
     if (e.error === 'audio-capture') {
+      isErrorCome = true;
       setTimeout(()=>{
         transcriptEl.textContent = 'Microphone could not be captured. Make sure no other app is using it, and microphone access is allowed.';
       },1000);
