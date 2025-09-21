@@ -149,6 +149,15 @@
 </div>
 
 <script>
+
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+// if (isMobile) {
+//     recog.continuous = false;  // Mobile often fails continuous recognition
+// } else {
+//     recog.continuous = true;
+// }
+alert(navigator.userAgent)
+
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const startBtn = document.getElementById('startBtn');
 const stopBtn  = document.getElementById('stopBtn');
